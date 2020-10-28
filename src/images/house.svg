@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="70.396" viewBox="0 0 38 70.396">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Caminho_103" data-name="Caminho 103" d="M5.472,0H32.528A5.361,5.361,0,0,1,38,5.243v59.91A5.361,5.361,0,0,1,32.528,70.4H5.472A5.361,5.361,0,0,1,0,65.153V5.243A5.361,5.361,0,0,1,5.472,0Z" transform="translate(0 87)" fill="#fff"/>
+    </clipPath>
+  </defs>
+  <g id="Grupo_de_máscara_5" data-name="Grupo de máscara 5" transform="translate(0 -87)" clip-path="url(#clip-path)">
+    <g id="home-icon-silhouette" transform="translate(0 105.245)">
+      <g id="Grupo_29" data-name="Grupo 29" transform="translate(0 0)">
+        <g id="Grupo_28" data-name="Grupo 28">
+          <path id="Caminho_101" data-name="Caminho 101" d="M37.363,28.226,31.6,22.708V16.333a2.18,2.18,0,0,0-4.356,0v2.2l-4.288-4.109a5.912,5.912,0,0,0-7.921,0l-14.4,13.8a2.027,2.027,0,0,0,0,2.952,2.246,2.246,0,0,0,3.081,0l14.4-13.8a1.327,1.327,0,0,1,1.762,0l14.4,13.8a2.248,2.248,0,0,0,3.081,0A2.026,2.026,0,0,0,37.363,28.226Z" transform="translate(0 -12.904)" fill="#fff"/>
+          <path id="Caminho_102" data-name="Caminho 102" d="M66.441,97a1.1,1.1,0,0,0-1.513,0L52.262,109.135a1.006,1.006,0,0,0-.313.726v8.85a3.845,3.845,0,0,0,3.924,3.76h6.271v-9.306h7.08v9.306h6.271a3.845,3.845,0,0,0,3.924-3.76v-8.85a1,1,0,0,0-.313-.726Z" transform="translate(-46.684 -88.564)" fill="#fff"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
