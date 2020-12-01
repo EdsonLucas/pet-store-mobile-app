@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+/* eslint-disable no-nested-ternary */
+import React, { useEffect, useState } from 'react';
 import { SimpleLineIcons, MaterialIcons } from '@expo/vector-icons';
 import SvgUri from 'expo-svg-uri';
+import { translate } from '~/locales';
 import {
   Container,
   Header,
@@ -24,12 +26,13 @@ import {
 } from '~/styles/home';
 import { colors, metrics } from '~/styles/global';
 import { Title, Text } from '~/styles/global/general';
+import api from '~/services/axios';
 
 const pets = [
   {
     index: 0,
     value: 'dog',
-    title: 'Cachorro',
+    title: 'modalChoseFood.dog',
     icon: (
       <SvgUri
         width="30px"
@@ -41,7 +44,7 @@ const pets = [
   {
     index: 1,
     value: 'cat',
-    title: 'Gato',
+    title: 'modalChoseFood.cat',
     icon: (
       <SvgUri
         width="35px"
@@ -53,8 +56,27 @@ const pets = [
 ];
 
 export default function Home({ navigation }) {
+  const translatedPets = pets.map((item) => {
+    const result = {
+      ...item,
+      title: translate(item.title),
+    };
+    return result;
+  });
+
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(translatedPets[0]);
+  const [food, setFood] = useState([]);
+
+  useEffect(() => {
+    api.get('produtos').then((item) => {
+      if (selectedProduct.value === 'dog') {
+        setFood(item.data.filter((x) => x.Tipo === 'C'));
+      } else {
+        setFood(item.data.filter((x) => x.Tipo === 'V'));
+      }
+    });
+  }, [selectedProduct]);
 
   const openModal = () => {
     setIsVisible(!isVisible);
@@ -73,7 +95,7 @@ export default function Home({ navigation }) {
             zIndex: 999,
           }}
         >
-          Olá,{'\n'}Bem-vindo
+          {translate('pageHome.welcome')}
         </Title>
         <Cat source={require('~/images/cat.png')} />
 
@@ -108,13 +130,15 @@ export default function Home({ navigation }) {
             fontWeight="700"
             marginBottom={10}
           >
-            Rações para
+            {translate('pageHome.title')}
           </Title>
 
           <SelectPetButton onPress={() => openModal()}>
             {selectedProduct.length === 0 ? (
               <SelectPet>
-                <Text fontSize="18px">Escolha o pet</Text>
+                <Text fontSize="18px">
+                  {translate('pageHome.dropdownText')}
+                </Text>
 
                 <MaterialIcons
                   name="keyboard-arrow-down"
@@ -141,19 +165,37 @@ export default function Home({ navigation }) {
             )}
           </SelectPetButton>
 
-          <CardProduct style={{ elevation: 3 }}>
-            <ProductImage source={require('~/images/racao.png')} />
-            <RightContainer>
-              <Title color={colors.darker} marginLeft={5} marginBottom={20}>
-                Ração para Cães Adulto Carne e Vegetais Pedigree
-              </Title>
-              <ProductButton onPress={() => navigation.navigate('Product')}>
-                <Text fontSize="20px" color={colors.white}>
-                  R$ 15.90
-                </Text>
-              </ProductButton>
-            </RightContainer>
-          </CardProduct>
+          {food.length === 0 ? (
+            <Title color={colors.darker} marginTop={40}>
+              Não existem rações nessa categoria ainda :(
+            </Title>
+          ) : (
+            <>
+              {food.map((item) => (
+                <CardProduct key={item.id} style={{ elevation: 3 }}>
+                  <ProductImage source={{ uri: item.Imagem }} />
+                  <RightContainer>
+                    <Title
+                      color={colors.darker}
+                      marginLeft={5}
+                      marginBottom={20}
+                    >
+                      {item.Nome}
+                    </Title>
+                    <ProductButton
+                      onPress={() =>
+                        navigation.navigate('Product', { product: item })
+                      }
+                    >
+                      <Text fontSize="20px" color={colors.white}>
+                        R$ {item.Valor}
+                      </Text>
+                    </ProductButton>
+                  </RightContainer>
+                </CardProduct>
+              ))}
+            </>
+          )}
         </Content>
       </Container>
 
@@ -180,11 +222,11 @@ export default function Home({ navigation }) {
               color={colors.darker}
               marginTop={30}
             >
-              Selecione a ração para o {'\n'} pet desejado
+              {translate('modalChoseFood.title')}
             </Title>
 
             <ModalContent>
-              {pets.map((item) => (
+              {translatedPets.map((item) => (
                 <SelectPetContainer
                   key={item.index}
                   onPress={() => [setSelectedProduct(item), openModal()]}

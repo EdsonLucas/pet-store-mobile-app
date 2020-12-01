@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import SvgUri from 'expo-svg-uri';
+import { translate } from '~/locales';
 import {
   Container,
   Header,
@@ -28,12 +29,12 @@ const options = [
   {
     index: 0,
     value: 'skip',
-    title: 'Pular',
+    title: 'modalAddAddress.step',
   },
   {
     index: 1,
     value: 'register',
-    title: 'Cadastrar',
+    title: 'modalAddAddress.register',
   },
 ];
 
@@ -57,6 +58,14 @@ const SignUp = ({ navigation }) => {
   const numberRef = useRef();
   const neighborhoodRef = useRef();
   const cityRef = useRef();
+
+  const translatedOptions = options.map((item) => {
+    const result = {
+      ...item,
+      title: translate(item.title),
+    };
+    return result;
+  });
 
   const openModal = () => {
     setIsVisible(!isVisible);
@@ -96,7 +105,7 @@ const SignUp = ({ navigation }) => {
 
         <Content showsVerticalScrollIndicator={false}>
           <Title fontSize="35px" color={colors.darker} marginBottom={40}>
-            Criar{'\n'}Conta
+            {translate('pageSignIn.title')}
           </Title>
 
           {enableStepButton && (
@@ -124,7 +133,7 @@ const SignUp = ({ navigation }) => {
             {position === 0 && (
               <>
                 <InputContainer>
-                  <Text>Name</Text>
+                  <Text>{translate('pageSignIn.name')}</Text>
                   <Input
                     maxLength={8}
                     returnKeyType="next"
@@ -137,7 +146,7 @@ const SignUp = ({ navigation }) => {
                 </InputContainer>
 
                 <InputContainer>
-                  <Text>E-mail</Text>
+                  <Text>{translate('pageSignIn.email')}</Text>
                   <Input
                     ref={emailRef}
                     returnKeyType="next"
@@ -150,7 +159,7 @@ const SignUp = ({ navigation }) => {
                 </InputContainer>
 
                 <InputContainer>
-                  <Text>Password</Text>
+                  <Text>{translate('pageSignIn.password')}</Text>
                   <Input
                     ref={passwordRef}
                     returnKeyType="done"
@@ -168,7 +177,7 @@ const SignUp = ({ navigation }) => {
             {position === 1 && (
               <>
                 <InputContainer>
-                  <Text>CEP</Text>
+                  <Text>{translate('pageAddAddress.CEP')}</Text>
                   <Input
                     maxLength={8}
                     returnKeyType="next"
@@ -182,7 +191,7 @@ const SignUp = ({ navigation }) => {
                 </InputContainer>
 
                 <InputContainer>
-                  <Text>Rua</Text>
+                  <Text>{translate('pageAddAddress.street')}</Text>
                   <Input
                     ref={streetRef}
                     returnKeyType="next"
@@ -196,7 +205,7 @@ const SignUp = ({ navigation }) => {
                 </InputContainer>
 
                 <InputContainer>
-                  <Text>Número</Text>
+                  <Text>{translate('pageAddAddress.number')}</Text>
                   <Input
                     ref={numberRef}
                     returnKeyType="next"
@@ -210,7 +219,7 @@ const SignUp = ({ navigation }) => {
                 </InputContainer>
 
                 <InputContainer>
-                  <Text>Bairro</Text>
+                  <Text>{translate('pageAddAddress.district')}</Text>
                   <Input
                     ref={neighborhoodRef}
                     returnKeyType="next"
@@ -223,7 +232,7 @@ const SignUp = ({ navigation }) => {
                 </InputContainer>
 
                 <InputContainer marginBottom={Platform.OS == 'android' && 100}>
-                  <Text>Cidade</Text>
+                  <Text>{translate('pageAddAddress.city')}</Text>
                   <Input
                     ref={cityRef}
                     returnKeyType="done"
@@ -241,10 +250,18 @@ const SignUp = ({ navigation }) => {
           <ButtonContainer>
             <Button
               onPress={() => {
-                position === 1 ? openModalMessage() : openModal();
+                position === 0 && enableStepButton === true
+                  ? setPosition(1)
+                  : position === 1
+                  ? openModalMessage()
+                  : openModal();
               }}
             >
-              <Title>{position === 0 ? `Avançar` : `Cadastrar`}</Title>
+              <Title>
+                {position === 0
+                  ? translate('pageSignIn.next')
+                  : translate('pageAddAddress.btnRegister')}
+              </Title>
             </Button>
           </ButtonContainer>
 
@@ -254,7 +271,7 @@ const SignUp = ({ navigation }) => {
             style={{ marginBottom: 60 }}
           >
             <Text color={colors.plate} textAlign="center">
-              Já possui conta?
+              {translate('pageSignIn.isHavaAccount')}
             </Text>
             <Button
               onPress={() => navigation.navigate('SignIn')}
@@ -262,7 +279,7 @@ const SignUp = ({ navigation }) => {
               backgrounColor={colors.transparent}
               style={{ marginLeft: -15 }}
             >
-              <Text color={colors.blue}>Faça o login</Text>
+              <Text color={colors.blue}>{translate('pageSignIn.doLogin')}</Text>
             </Button>
           </ButtonContainer>
         </Content>
@@ -292,11 +309,11 @@ const SignUp = ({ navigation }) => {
               marginTop={30}
               marginBottom={10}
             >
-              Deseja realizar o {'\n'} cadastro do endereço agora?
+              {translate('modalAddAddress.text')}
             </Title>
 
             <ModalContent>
-              {options.map((item) => (
+              {translatedOptions.map((item) => (
                 <SelectContainer
                   key={item.index}
                   onPress={() => resultSubmit(item.value)}
@@ -323,8 +340,8 @@ const SignUp = ({ navigation }) => {
         <ConfirmMessage
           onClosed={openModalMessage}
           onSubmit={onSubmit}
-          title="Prontinho!"
-          message="O seu cadastro foi realizado, estaremos te redirecionando para página inicial"
+          title={translate('modalAddAddressSucess.title')}
+          message={translate('modalAddAddressSucess.desc')}
           timeout
         />
       )}

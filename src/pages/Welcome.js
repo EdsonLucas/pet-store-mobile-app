@@ -2,6 +2,7 @@ import React from 'react';
 import { Image } from 'react-native';
 import { colors, metrics } from '~/styles/global';
 import { Title, Text } from '~/styles/global/general';
+import { translate } from '~/locales';
 
 import { Container, ButtonContainer, Button } from '~/styles/welcome';
 
@@ -21,17 +22,16 @@ const Welcome = ({ navigation }) => {
         marginLeft={60}
         marginRight={60}
       >
-        Compre sua ração na Pet Store e gaste seu tempo com quem sempre está ao
-        seu lado.
+        {translate('main.mainDesc')}
       </Title>
 
       <ButtonContainer>
         <Button onPress={() => navigation.navigate('SignIn')}>
-          <Title>Já sou cliente</Title>
+          <Title>{translate('main.btnJaSouC')}</Title>
         </Button>
         <Button backgroundColor={colors.transparent}>
           <Title onPress={() => navigation.navigate('SignUp')}>
-            Cadastre-se
+            {translate('main.btnSignin')}
           </Title>
         </Button>
       </ButtonContainer>

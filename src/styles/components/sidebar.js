@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
+import Modal from 'react-native-modalbox';
 import { colors, metrics } from '~/styles/global';
 
 export const Container = styled.View`
@@ -40,4 +41,37 @@ export const Hr = styled.View`
   margin: 4% 0;
   border-bottom-width: 1.5px;
   border-bottom-color: ${colors.gray};
+`;
+
+export const ModalBox = styled(Modal)`
+  height: ${(props) => props.height || 350}px;
+  background-color: ${colors.transparent};
+`;
+
+export const ModalContainer = styled.ScrollView`
+  background-color: ${colors.white};
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  z-index: 3;
+`;
+
+export const BackButton = styled.TouchableOpacity``;
+
+export const ModalContent = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  padding: ${(props) => props.paddingVertical || 10}px ${metrics.basePadding}px;
+`;
+
+export const SelectLanguageContainer = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  padding: ${(props) => props.padding || 0}px;
+  margin: ${(props) => props.marginVertical || 0}px 0px;
 `;

@@ -1,6 +1,7 @@
 import React from 'react';
 import SvgUri from 'expo-svg-uri';
 import { Image } from 'react-native';
+import { translate } from '~/locales';
 import { Container, Header, BackButton, Content } from '~/styles/about';
 import { colors, metrics } from '~/styles/global';
 import { Title, Text } from '~/styles/global/general';
@@ -31,9 +32,9 @@ const About = ({ navigation }) => {
           marginLeft={60}
           marginRight={60}
         >
-          O seu aplicativo de compra de ração online.
+          {translate('pageAbout.desc')}
         </Title>
-        <Text color={colors.white}>Versão 1.0.0</Text>
+        <Text color={colors.white}>{translate('pageAbout.version')}</Text>
       </Content>
     </Container>
   );

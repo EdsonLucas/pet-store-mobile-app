@@ -1,6 +1,7 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
+import { isAuthenticated } from '~/services/auth';
 
 import Sidebar from './components/Sidebar';
 
@@ -23,7 +24,10 @@ const Drawer = createDrawerNavigator();
 
 function Dashboard() {
   return (
-    <Drawer.Navigator drawerContent={(props) => <Sidebar {...props} />}>
+    <Drawer.Navigator
+      initialRouteName="Home"
+      drawerContent={(props) => <Sidebar {...props} />}
+    >
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Address" component={Address} />
       <Drawer.Screen name="Orders" component={Orders} />
@@ -36,7 +40,7 @@ function Dashboard() {
 function Login() {
   return (
     <Stack.Navigator
-      initialRouteName="Welcome"
+      initialRouteName={!isAuthenticated ? `Dashboard` : `Welcome`}
       screenOptions={{
         headerShown: false,
       }}

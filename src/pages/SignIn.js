@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
+import { CommonActions } from '@react-navigation/native';
 import { KeyboardAvoidingView, Platform, Image } from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { translate } from '~/locales';
 import {
   Container,
   Food,
@@ -15,18 +17,44 @@ import {
 } from '~/styles/signin';
 import { colors, metrics } from '~/styles/global';
 import { Title, Text } from '~/styles/global/general';
+import api from '~/services/axios';
 
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassoword] = useState('');
   const passwordRef = useRef();
 
+  async function setData(key, value) {
+    AsyncStorage.setItem(`@${key}`, value);
+  }
+
+  const redirect = () => {
+    api
+      .post('users/autenticar', {
+        Texto: 'arlanmendes@gmail.com',
+        Senha: 'Arl@n123',
+      })
+      .then((x) => {
+        if (x.data.autenticado) {
+          setData('@userNome', x.data.user.Nome);
+          setData('@userEmail', x.data.user.Email);
+
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'Dashboard' }],
+            }),
+          );
+        }
+      });
+  };
+
   return (
     <Container>
       <Food source={require('~/images/food.png')} />
       <Header>
         <Title fontSize="20px" color={colors.darker} marginBottom={15}>
-          Bem vindo ao
+          {translate('pageLogin.welcome')}
         </Title>
         <Image
           source={require('~/images/logo-main.png')}
@@ -44,9 +72,9 @@ const SignIn = ({ navigation }) => {
           }}
         >
           <InputContainer>
-            <Text marginLeft={20}>E-mail</Text>
+            <Text marginLeft={20}>{translate('pageLogin.email')}</Text>
             <Input
-              maxLength={8}
+              autoCapitalize="none"
               returnKeyType="next"
               onSubmitEditing={() => passwordRef.current.focus()}
               value={email}
@@ -57,7 +85,7 @@ const SignIn = ({ navigation }) => {
           </InputContainer>
 
           <InputContainer>
-            <Text marginLeft={20}>Password</Text>
+            <Text marginLeft={20}>{translate('pageLogin.password')}</Text>
             <Input
               ref={passwordRef}
               returnKeyType="done"
@@ -72,12 +100,12 @@ const SignIn = ({ navigation }) => {
 
           <LastContainer>
             <ButtonContainer>
-              <Button onPress={() => navigation.navigate('Dashboard')}>
-                <Title>Entrar</Title>
+              <Button onPress={() => redirect()}>
+                <Title>{translate('pageLogin.btnEnter')}</Title>
               </Button>
 
               <Text alignSelf="center" marginTop={10} marginBottom={10}>
-                Ou
+                {translate('pageLogin.or')}
               </Text>
 
               <Button
@@ -86,13 +114,16 @@ const SignIn = ({ navigation }) => {
                 backgroundColor={colors.yellow}
                 onPress={() => navigation.navigate('SignUp')}
               >
-                <Text color={colors.white}>Cadastre-se</Text>
+                <Text color={colors.white}>
+                  {translate('pageLogin.btnSignin')}
+                </Text>
               </Button>
             </ButtonContainer>
 
             <Text color={colors.plate} textAlign="center">
-              Ao continuar, você aceita nossos {'\n'}
-              <Text>Termos e condições</Text>
+              {translate('pageLogin.termo')}
+              {'\n'}
+              <Text>{translate('pageLogin.termo2')}</Text>
             </Text>
           </LastContainer>
         </KeyboardAvoidingView>

@@ -1,5 +1,6 @@
 import React from 'react';
 import SvgUri from 'expo-svg-uri';
+import { translate } from '~/locales';
 import {
   Container,
   Header,
@@ -28,7 +29,7 @@ const Orders = ({ navigation }) => {
 
       <Content showsVerticalScrollIndicator={false}>
         <Title fontSize="35px" color={colors.darker} marginBottom={10}>
-          Meus{'\n'}Pedidos
+          {translate('pageNewRequests.title')}
         </Title>
 
         <CardProduct style={{ elevation: 3 }}>

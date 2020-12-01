@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import SvgUri from 'expo-svg-uri';
+import { translate } from '~/locales';
 import {
   Container,
   Header,
@@ -47,13 +48,13 @@ const Address = ({ navigation }) => {
 
       <Content showsVerticalScrollIndicator={false}>
         <Title fontSize="35px" color={colors.darker} marginBottom={10}>
-          Meus{'\n'}Endereços
+          {translate('pageAddress.title')}
         </Title>
 
         <CardList>
           {isEmpty ? (
             <Title color={colors.darker}>
-              Você não possui nenhum endereço cadastrado :(
+              {translate('pageAddress.empty')}
             </Title>
           ) : (
             <>
@@ -92,7 +93,7 @@ const Address = ({ navigation }) => {
 
       <ButtonContainer>
         <Button onPress={() => navigation.navigate('NewAddress')}>
-          <Title>Adicionar Novo Endereço</Title>
+          <Title>{translate('pageAddress.btnAdd')}</Title>
         </Button>
       </ButtonContainer>
     </Container>

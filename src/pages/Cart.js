@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import SvgUri from 'expo-svg-uri';
 import { Image } from 'react-native';
+import { translate } from '~/locales';
 import {
   Container,
   Header,
@@ -34,6 +35,7 @@ import {
 } from '~/styles/cart';
 import { colors, metrics } from '~/styles/global';
 import { Title, Text } from '~/styles/global/general';
+import api from '~/services/axios';
 
 import ConfirmMessage from '~/components/ConfirmMessage';
 
@@ -49,16 +51,17 @@ const payment = [
   {
     index: 0,
     value: 'dinheiro',
-    title: 'Dinheiro',
+    title: 'pageCart.money',
   },
   {
     index: 1,
     value: 'picpay',
-    title: 'PicPay',
+    title: 'pageCart.picpay',
   },
 ];
 
-const Cart = ({ navigation }) => {
+const Cart = ({ navigation, route }) => {
+  const [products, setProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [isEmpty, setIsEmpty] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -66,6 +69,36 @@ const Cart = ({ navigation }) => {
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [productValue, setProductValue] = useState(15.9);
   const [productValueFinal, setProductValueFinal] = useState(productValue);
+
+  const getProduct = (id) => {
+    id.map((itemId) => {
+      api.get(`compras/${itemId}`).then((item) => {
+        setProducts(...products, item);
+      });
+    });
+  };
+
+  useEffect(() => {
+    api.get('compras/1/carrinho').then((x) => {
+      const lista = x.data.map((compra) => compra.ProdutoId);
+
+      getProduct(lista);
+    });
+
+    // api.delete('compras/1/carrinho/1').then((x) => {
+    //   console.log(x.data);
+    // });
+  }, []);
+
+  console.log(products.data);
+
+  const translatedPayment = payment.map((item) => {
+    const result = {
+      ...item,
+      title: translate(item.title),
+    };
+    return result;
+  });
 
   const newValue = () => {
     setProductValueFinal(productValue * quantity);
@@ -116,11 +149,11 @@ const Cart = ({ navigation }) => {
 
         <Content showsVerticalScrollIndicator={false}>
           <Title fontSize="35px" color={colors.darker} marginBottom={30}>
-            Carrinho
+            {translate('pageCart.title')}
           </Title>
 
           <Text fontSize="18px" marginBottom={10}>
-            Entregar em
+            {translate('pageCart.deliverAddress')}
           </Text>
 
           <Card disabled>
@@ -144,10 +177,10 @@ const Cart = ({ navigation }) => {
             </SelectedContainer>
           </Card>
 
-          <Text fontSize="18px">Produtos</Text>
+          <Text fontSize="18px">{translate('pageCart.products')}</Text>
           {isEmpty ? (
             <Text marginTop={15} fontSize="18px" color={colors.plate}>
-              O carrinho está vazio :(
+              {translate('pageCart.emptyCart')}
             </Text>
           ) : (
             <>
@@ -195,12 +228,14 @@ const Cart = ({ navigation }) => {
           )}
 
           <Text fontSize="18px" marginTop={20} marginBottom={10}>
-            Forma de Pagamento
+            {translate('pageCart.wayOfPayments')}
           </Text>
           <SelectPaymentButton onPress={() => openModal()}>
             {selectedProduct.length === 0 ? (
               <SelectPayment>
-                <Text fontSize="18px">Forma de pagamento</Text>
+                <Text fontSize="18px">
+                  {translate('pageCart.wayOfPayments')}
+                </Text>
 
                 <MaterialIcons
                   name="keyboard-arrow-down"
@@ -224,21 +259,25 @@ const Cart = ({ navigation }) => {
           </SelectPaymentButton>
 
           <Text fontSize="18px" marginTop={20}>
-            Resumo
+            {translate('pageCart.sumary')}
           </Text>
           <CardResume>
             <ItemResume>
-              <Title color={colors.darker}>Total</Title>
+              <Title color={colors.darker}>{translate('pageCart.total')}</Title>
               <Text color={colors.plate}>
                 R${isEmpty ? `00.0` : productValueFinal}
               </Text>
             </ItemResume>
             <ItemResume>
-              <Title color={colors.darker}>Frete</Title>
+              <Title color={colors.darker}>
+                {translate('pageCart.shipping')}
+              </Title>
               <Text color={colors.plate}>Gratuito</Text>
             </ItemResume>
             <ItemResume>
-              <Title color={colors.darker}>Valor Final</Title>
+              <Title color={colors.darker}>
+                {translate('pageCart.totalToPay')}
+              </Title>
               <Text fontSize="25px" color={colors.blue}>
                 R${isEmpty ? `00.0` : productValueFinal}
               </Text>
@@ -248,7 +287,7 @@ const Cart = ({ navigation }) => {
 
         <ButtonContainer>
           <Button onPress={() => openModalMessage()}>
-            <Title>Finalizar Compra</Title>
+            <Title>{translate('pageCart.btnBuy')}</Title>
           </Button>
         </ButtonContainer>
       </Container>
@@ -277,11 +316,11 @@ const Cart = ({ navigation }) => {
               marginTop={30}
               marginBottom={20}
             >
-              Selecione a {'\n'}forma de pagamento
+              {translate('pageCart.dropdownWayOfPayments')}
             </Title>
 
             <ModalContent>
-              {payment.map((item) => (
+              {translatedPayment.map((item) => (
                 <SelectContainer
                   key={item.index}
                   onPress={() => [setSelectedProduct(item), openModal()]}
@@ -307,11 +346,11 @@ const Cart = ({ navigation }) => {
       {isVisible2 && (
         <ConfirmMessage
           onClosed={openModalMessage}
-          title="Obrigado!"
-          message="O seu pedido #76281 foi realizado. Por favor, verifique o status do pedido."
+          title={translate('modalBuySucess.title')}
+          message={translate('modalBuySucess.desc')}
           existButtons
           onSubmit={() => navigation.navigate('Home')}
-          onSubmitTitle="Continuar comprando"
+          onSubmitTitle={translate('modalBuySucess.btnContiueBuying')}
         />
       )}
     </>

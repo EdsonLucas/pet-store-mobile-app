@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import SvgUri from 'expo-svg-uri';
-import { platformApiLevel } from 'expo-device';
+import { translate } from '~/locales';
 import {
   Container,
   Header,
@@ -49,7 +49,7 @@ const NewAddress = ({ navigation }) => {
 
         <Content showsVerticalScrollIndicator={false}>
           <Title fontSize="35px" color={colors.darker} marginBottom={40}>
-            Novo{'\n'}Endereço
+            {translate('pageAddAddress.title')}
           </Title>
 
           <KeyboardAvoidingView
@@ -59,7 +59,7 @@ const NewAddress = ({ navigation }) => {
             }}
           >
             <InputContainer>
-              <Text>CEP</Text>
+              <Text>{translate('pageAddAddress.CEP')}</Text>
               <Input
                 maxLength={8}
                 returnKeyType="next"
@@ -73,7 +73,7 @@ const NewAddress = ({ navigation }) => {
             </InputContainer>
 
             <InputContainer>
-              <Text>Rua</Text>
+              <Text>{translate('pageAddAddress.street')}</Text>
               <Input
                 ref={streetRef}
                 returnKeyType="next"
@@ -86,7 +86,7 @@ const NewAddress = ({ navigation }) => {
             </InputContainer>
 
             <InputContainer>
-              <Text>Número</Text>
+              <Text>{translate('pageAddAddress.number')}</Text>
               <Input
                 ref={numberRef}
                 returnKeyType="next"
@@ -100,7 +100,7 @@ const NewAddress = ({ navigation }) => {
             </InputContainer>
 
             <InputContainer>
-              <Text>Bairro</Text>
+              <Text>{translate('pageAddAddress.district')}</Text>
               <Input
                 ref={neighborhoodRef}
                 returnKeyType="next"
@@ -113,7 +113,7 @@ const NewAddress = ({ navigation }) => {
             </InputContainer>
 
             <InputContainer marginBottom={Platform.OS == 'android' && 100}>
-              <Text>Cidade</Text>
+              <Text>{translate('pageAddAddress.city')}</Text>
               <Input
                 ref={cityRef}
                 returnKeyType="done"
@@ -129,7 +129,7 @@ const NewAddress = ({ navigation }) => {
 
         <ButtonContainer>
           <Button onPress={() => openModalMessage()}>
-            <Title>Adicionar</Title>
+            <Title>{translate('pageAddAddress.btnAdd')}</Title>
           </Button>
         </ButtonContainer>
       </Container>
@@ -138,8 +138,8 @@ const NewAddress = ({ navigation }) => {
         <ConfirmMessage
           onClosed={openModalMessage}
           onSubmit={() => navigation.navigate('Address')}
-          title="Prontinho!"
-          message="Seu novo endereço foi cadastrado com sucesso"
+          title={translate('modalAlterAddress.title')}
+          message={translate('modalAlterAddress.desc')}
           timeout
         />
       )}

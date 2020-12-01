@@ -93,6 +93,7 @@ export const ProductImage = styled.Image`
 
 export const RightContainer = styled.View`
   flex-direction: column;
+  justify-content: space-between;
 
   width: 60%;
   margin-left: 10px;

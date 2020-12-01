@@ -4,7 +4,7 @@ import SvgUri from 'expo-svg-uri';
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors, metrics } from '~/styles/global';
 import { Title, Text } from '~/styles/global/general';
-
+import { translate } from '~/locales';
 import {
   Container,
   Header,
@@ -21,13 +21,33 @@ import {
   Collapse,
   Button,
 } from '~/styles/product';
+import api from '~/services/axios';
 
-const Product = ({ navigation }) => {
+const Product = ({ navigation, route }) => {
+  const {
+    Nome,
+    Imagem,
+    Tipo,
+    Detalhe,
+    Especificacao,
+    Valor,
+    id,
+  } = route.params.product;
+
   const [quantity, setQuantity] = useState(1);
   const [specifications, setSpecifications] = useState(false);
   const [details, setDetails] = useState(false);
-  const [productValue, setProductValue] = useState(15.9);
+  const [productValue, setProductValue] = useState(Valor);
   const [productValueFinal, setProductValueFinal] = useState(productValue);
+
+  const handleBuy = () => {
+    api
+      .post('compras/1/carrinho', {
+        ProdutoId: id,
+        Quantidade: quantity,
+      })
+      .then(() => navigation.navigate('Dashboard', { screen: 'Cart' }));
+  };
 
   const newValue = () => {
     setProductValueFinal(productValue * quantity);
@@ -61,15 +81,11 @@ const Product = ({ navigation }) => {
 
       <Content showsVerticalScrollIndicator={false}>
         <Title fontSize="25px" color={colors.darker}>
-          Ração para Cães Adulto Carne e Vegetais Pedigree
+          {Nome}
         </Title>
 
         <ContainerImage>
-          <Image
-            source={require('../images/racao.png')}
-            width="177px"
-            height="263px"
-          />
+          <Image source={{ uri: Imagem }} style={{ width: 130, height: 160 }} />
         </ContainerImage>
 
         <ProductButtons>
@@ -95,7 +111,9 @@ const Product = ({ navigation }) => {
 
         <DescriptionContainer>
           <Collapse onPress={() => setSpecifications(!specifications)}>
-            <Title color={colors.darker}>Especificações</Title>
+            <Title color={colors.darker}>
+              {translate('pageProductDetails.dropdownEspecification')}
+            </Title>
 
             <MaterialIcons
               name={
@@ -108,13 +126,14 @@ const Product = ({ navigation }) => {
 
           {specifications && (
             <Text marginLeft={20} marginBottom={30}>
-              This is the collapsible content. It can be any element or React
-              component you like.
+              {Especificacao}
             </Text>
           )}
 
           <Collapse onPress={() => setDetails(!details)}>
-            <Title color={colors.darker}>Detalhes</Title>
+            <Title color={colors.darker}>
+              {translate('pageProductDetails.dropdownDetails')}
+            </Title>
 
             <MaterialIcons
               name={
@@ -127,19 +146,18 @@ const Product = ({ navigation }) => {
 
           {details && (
             <Text marginLeft={20} marginBottom={30}>
-              This is the collapsible content. It can be any element or React
-              component you like.
+              {Detalhe}
             </Text>
           )}
         </DescriptionContainer>
       </Content>
 
       <ButtonContainer>
-        <Button
-          onPress={() => navigation.navigate('Dashboard', { screen: 'Cart' })}
-        >
+        <Button onPress={() => handleBuy()}>
           <SvgUri source={require('~/images/shopping-cart.svg')} />
-          <Title marginLeft={20}> Comprar agora </Title>
+          <Title marginLeft={20}>
+            {translate('pageProductDetails.btnBuy')}
+          </Title>
         </Button>
       </ButtonContainer>
     </Container>
