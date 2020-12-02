@@ -26,7 +26,6 @@ import {
 } from '~/styles/home';
 import { colors, metrics } from '~/styles/global';
 import { Title, Text } from '~/styles/global/general';
-import api from '~/services/axios';
 
 const pets = [
   {
@@ -66,17 +65,6 @@ export default function Home({ navigation }) {
 
   const [isVisible, setIsVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(translatedPets[0]);
-  const [food, setFood] = useState([]);
-
-  useEffect(() => {
-    api.get('produtos').then((item) => {
-      if (selectedProduct.value === 'dog') {
-        setFood(item.data.filter((x) => x.Tipo === 'C'));
-      } else {
-        setFood(item.data.filter((x) => x.Tipo === 'V'));
-      }
-    });
-  }, [selectedProduct]);
 
   const openModal = () => {
     setIsVisible(!isVisible);
@@ -165,37 +153,19 @@ export default function Home({ navigation }) {
             )}
           </SelectPetButton>
 
-          {food.length === 0 ? (
-            <Title color={colors.darker} marginTop={40}>
-              Não existem rações nessa categoria ainda :(
-            </Title>
-          ) : (
-            <>
-              {food.map((item) => (
-                <CardProduct key={item.id} style={{ elevation: 3 }}>
-                  <ProductImage source={{ uri: item.Imagem }} />
-                  <RightContainer>
-                    <Title
-                      color={colors.darker}
-                      marginLeft={5}
-                      marginBottom={20}
-                    >
-                      {item.Nome}
-                    </Title>
-                    <ProductButton
-                      onPress={() =>
-                        navigation.navigate('Product', { product: item })
-                      }
-                    >
-                      <Text fontSize="20px" color={colors.white}>
-                        R$ {item.Valor}
-                      </Text>
-                    </ProductButton>
-                  </RightContainer>
-                </CardProduct>
-              ))}
-            </>
-          )}
+          <CardProduct style={{ elevation: 3 }}>
+            <ProductImage source={require('~/images/racao.png')} />
+            <RightContainer>
+              <Title color={colors.darker} marginLeft={5} marginBottom={20}>
+                Ração para Cães Adulto Carne e Vegetais Pedigree
+              </Title>
+              <ProductButton onPress={() => navigation.navigate('Product')}>
+                <Text fontSize="20px" color={colors.white}>
+                  R$ 15.90
+                </Text>
+              </ProductButton>
+            </RightContainer>
+          </CardProduct>
         </Content>
       </Container>
 

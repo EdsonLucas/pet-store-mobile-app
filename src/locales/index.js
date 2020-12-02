@@ -30,7 +30,7 @@ I18n.translations = {
 };
 
 const getLanguage = async () => {
-  const language = await AsyncStorage.getItem('@lang');
+  const language = await AsyncStorage.getItem('@petStore:lang');
 
   const iHaveThisLanguage = I18n.translations.hasOwnProperty(language);
 
@@ -45,7 +45,7 @@ const setLanguageToI18n = async (newLanguage) => {
   if (newLanguage) {
     const translateNormalize = normalizeTranslate[newLanguage];
 
-    await AsyncStorage.setItem('@lang', translateNormalize);
+    await AsyncStorage.setItem('@petStore:lang', translateNormalize);
 
     return NativeModules.DevSettings.reload();
   }

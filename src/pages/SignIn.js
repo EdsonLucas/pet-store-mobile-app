@@ -17,36 +17,19 @@ import {
 } from '~/styles/signin';
 import { colors, metrics } from '~/styles/global';
 import { Title, Text } from '~/styles/global/general';
-import api from '~/services/axios';
 
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassoword] = useState('');
   const passwordRef = useRef();
 
-  async function setData(key, value) {
-    AsyncStorage.setItem(`@${key}`, value);
-  }
-
   const redirect = () => {
-    api
-      .post('users/autenticar', {
-        Texto: 'arlanmendes@gmail.com',
-        Senha: 'Arl@n123',
-      })
-      .then((x) => {
-        if (x.data.autenticado) {
-          setData('@userNome', x.data.user.Nome);
-          setData('@userEmail', x.data.user.Email);
-
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{ name: 'Dashboard' }],
-            }),
-          );
-        }
-      });
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'Dashboard' }],
+      }),
+    );
   };
 
   return (

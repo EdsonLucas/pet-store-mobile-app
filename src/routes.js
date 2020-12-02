@@ -1,7 +1,6 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { isAuthenticated } from '~/services/auth';
 
 import Sidebar from './components/Sidebar';
 
@@ -40,7 +39,7 @@ function Dashboard() {
 function Login() {
   return (
     <Stack.Navigator
-      initialRouteName={!isAuthenticated ? `Dashboard` : `Welcome`}
+      initialRouteName="Welcome"
       screenOptions={{
         headerShown: false,
       }}

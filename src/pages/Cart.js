@@ -35,7 +35,6 @@ import {
 } from '~/styles/cart';
 import { colors, metrics } from '~/styles/global';
 import { Title, Text } from '~/styles/global/general';
-import api from '~/services/axios';
 
 import ConfirmMessage from '~/components/ConfirmMessage';
 
@@ -60,7 +59,7 @@ const payment = [
   },
 ];
 
-const Cart = ({ navigation, route }) => {
+const Cart = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -69,28 +68,6 @@ const Cart = ({ navigation, route }) => {
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [productValue, setProductValue] = useState(15.9);
   const [productValueFinal, setProductValueFinal] = useState(productValue);
-
-  const getProduct = (id) => {
-    id.map((itemId) => {
-      api.get(`compras/${itemId}`).then((item) => {
-        setProducts(...products, item);
-      });
-    });
-  };
-
-  useEffect(() => {
-    api.get('compras/1/carrinho').then((x) => {
-      const lista = x.data.map((compra) => compra.ProdutoId);
-
-      getProduct(lista);
-    });
-
-    // api.delete('compras/1/carrinho/1').then((x) => {
-    //   console.log(x.data);
-    // });
-  }, []);
-
-  console.log(products.data);
 
   const translatedPayment = payment.map((item) => {
     const result = {

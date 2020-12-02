@@ -21,33 +21,13 @@ import {
   Collapse,
   Button,
 } from '~/styles/product';
-import api from '~/services/axios';
 
-const Product = ({ navigation, route }) => {
-  const {
-    Nome,
-    Imagem,
-    Tipo,
-    Detalhe,
-    Especificacao,
-    Valor,
-    id,
-  } = route.params.product;
-
+const Product = ({ navigation }) => {
   const [quantity, setQuantity] = useState(1);
   const [specifications, setSpecifications] = useState(false);
   const [details, setDetails] = useState(false);
-  const [productValue, setProductValue] = useState(Valor);
+  const [productValue, setProductValue] = useState(15.9);
   const [productValueFinal, setProductValueFinal] = useState(productValue);
-
-  const handleBuy = () => {
-    api
-      .post('compras/1/carrinho', {
-        ProdutoId: id,
-        Quantidade: quantity,
-      })
-      .then(() => navigation.navigate('Dashboard', { screen: 'Cart' }));
-  };
 
   const newValue = () => {
     setProductValueFinal(productValue * quantity);
@@ -81,11 +61,15 @@ const Product = ({ navigation, route }) => {
 
       <Content showsVerticalScrollIndicator={false}>
         <Title fontSize="25px" color={colors.darker}>
-          {Nome}
+          Ração para Cães Adulto Carne e Vegetais Pedigree
         </Title>
 
         <ContainerImage>
-          <Image source={{ uri: Imagem }} style={{ width: 130, height: 160 }} />
+          <Image
+            source={require('../images/racao.png')}
+            width="177px"
+            height="263px"
+          />
         </ContainerImage>
 
         <ProductButtons>
@@ -126,7 +110,8 @@ const Product = ({ navigation, route }) => {
 
           {specifications && (
             <Text marginLeft={20} marginBottom={30}>
-              {Especificacao}
+              This is the collapsible content. It can be any element or React
+              component you like.
             </Text>
           )}
 
@@ -146,14 +131,17 @@ const Product = ({ navigation, route }) => {
 
           {details && (
             <Text marginLeft={20} marginBottom={30}>
-              {Detalhe}
+              This is the collapsible content. It can be any element or React
+              component you like.
             </Text>
           )}
         </DescriptionContainer>
       </Content>
 
       <ButtonContainer>
-        <Button onPress={() => handleBuy()}>
+        <Button
+          onPress={() => navigation.navigate('Dashboard', { screen: 'Cart' })}
+        >
           <SvgUri source={require('~/images/shopping-cart.svg')} />
           <Title marginLeft={20}>
             {translate('pageProductDetails.btnBuy')}

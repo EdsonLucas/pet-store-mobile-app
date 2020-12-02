@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CommonActions } from '@react-navigation/native';
 import { DrawerItem } from '@react-navigation/drawer';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'react-native';
 import SvgUri from 'expo-svg-uri';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { translate, setLanguageToI18n } from '~/locales';
 import {
   Container,
@@ -20,25 +19,11 @@ import {
 } from '~/styles/components/sidebar';
 import { colors, metrics } from '~/styles/global';
 import { Title, Text } from '~/styles/global/general';
-import { logout } from '~/services/auth';
 
 export default function Sidebar({ ...props }) {
   const [isVisible, setIsVisible] = useState();
 
-  let data;
-
-  useEffect(() => {
-    async function getData() {
-      data = await AsyncStorage.getItem('@userNome');
-    }
-
-    getData();
-    console.log(data);
-  }, [data]);
-
   const redirect = () => {
-    logout();
-
     props.navigation.dispatch(
       CommonActions.reset({
         index: 0,
@@ -61,8 +46,8 @@ export default function Sidebar({ ...props }) {
             height="60px"
           />
           <RightContainer>
-            <Title>--</Title>
-            <Text color={colors.white}>--</Text>
+            <Title>Edson Lucas</Title>
+            <Text color={colors.white}>edl_@live.com</Text>
           </RightContainer>
         </UserContainer>
         <Content>
